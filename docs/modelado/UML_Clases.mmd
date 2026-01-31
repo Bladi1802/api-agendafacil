@@ -1,0 +1,89 @@
+classDiagram
+  class User {
+    +UUID id
+    +string username
+    +string email
+    +Role role
+    +datetime created_at
+    +datetime updated_at
+  }
+
+  class Business {
+    +UUID id
+    +UUID owner_id
+    +string name
+    +string category
+    +string phone
+    +string address
+    +bool is_active
+    +datetime created_at
+    +datetime updated_at
+  }
+
+  class Service {
+    +UUID id
+    +UUID business_id
+    +string name
+    +string description
+    +int duration_min
+    +decimal price
+    +bool is_active
+    +datetime created_at
+    +datetime updated_at
+  }
+
+  class Appointment {
+    +UUID id
+    +UUID business_id
+    +UUID client_id
+    +datetime start_at
+    +datetime end_at
+    +AppointmentStatus status
+    +string notes
+    +datetime created_at
+    +datetime updated_at
+  }
+
+  class AppointmentService {
+    +UUID id
+    +UUID appointment_id
+    +UUID service_id
+    +int quantity
+    +decimal unit_price
+    +datetime created_at
+    +datetime updated_at
+  }
+
+  class AvailabilitySlot {
+    +UUID id
+    +UUID business_id
+    +int day_of_week
+    +time start_time
+    +time end_time
+    +bool is_active
+    +datetime created_at
+    +datetime updated_at
+  }
+
+  class Role {
+    <<enumeration>>
+    CLIENT
+    BUSINESS
+    ADMIN
+  }
+
+  class AppointmentStatus {
+    <<enumeration>>
+    PENDING
+    CONFIRMED
+    CANCELLED
+    COMPLETED
+  }
+
+  User "1" --> "0..*" Business : owns
+  User "1" --> "0..*" Appointment : books
+  Business "1" --> "0..*" Service : offers
+  Business "1" --> "0..*" Appointment : receives
+  Appointment "1" --> "1..*" AppointmentService : details
+  Service "1" --> "0..*" AppointmentService : included
+  Business "1" --> "0..*" AvailabilitySlot : defines

@@ -1,0 +1,77 @@
+erDiagram
+    USER ||--o{ BUSINESS : owns
+    USER ||--o{ APPOINTMENT : books
+
+    BUSINESS ||--o{ SERVICE : offers
+    BUSINESS ||--o{ APPOINTMENT : receives
+
+    APPOINTMENT ||--o{ APPOINTMENT_SERVICE : has
+    SERVICE ||--o{ APPOINTMENT_SERVICE : included_in
+
+    BUSINESS ||--o{ AVAILABILITY_SLOT : defines
+
+    USER {
+      uuid id PK
+      string username "unique"
+      string email "unique"
+      string role "CLIENT|BUSINESS|ADMIN"
+      datetime created_at
+      datetime updated_at
+    }
+
+    BUSINESS {
+      uuid id PK
+      uuid owner_id FK
+      string name
+      string category
+      string phone
+      string address
+      boolean is_active
+      datetime created_at
+      datetime updated_at
+    }
+
+    SERVICE {
+      uuid id PK
+      uuid business_id FK
+      string name
+      string description
+      int duration_min
+      decimal price
+      boolean is_active
+      datetime created_at
+      datetime updated_at
+    }
+
+    APPOINTMENT {
+      uuid id PK
+      uuid business_id FK
+      uuid client_id FK
+      datetime start_at
+      datetime end_at
+      string status "PENDING|CONFIRMED|CANCELLED|COMPLETED"
+      string notes
+      datetime created_at
+      datetime updated_at
+    }
+
+    APPOINTMENT_SERVICE {
+      uuid id PK
+      uuid appointment_id FK
+      uuid service_id FK
+      int quantity
+      decimal unit_price
+      datetime created_at
+      datetime updated_at
+    }
+
+    AVAILABILITY_SLOT {
+      uuid id PK
+      uuid business_id FK
+      int day_of_week "0-6"
+      time start_time
+      time end_time
+      boolean is_active
+      datetime created_at
+      datetime updated_at
+    }
